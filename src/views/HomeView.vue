@@ -5,11 +5,18 @@ import { ref } from 'vue';
 import { useCountdown } from '@vueuse/core';
 import { getBreakTime } from '../helpers/getBreakTime';
 import { getTotalMinutes } from '../helpers/getTotalMinutes';
+import background from '../assets/background.jpg'
+import { getImages } from '../helpers/getImages';
 
 const stopwatch = useStopwatch(0, false);
+const wallpaperSelector = ref(false);
 
 const focusing = ref(false);
 const headerText = ref("Start Focusing!!!!");
+
+const searchQuery = ref("");
+const images = ref([]);
+const loading = ref(false);
 
 const { start, reset, remaining, } = useCountdown(0, {
     onComplete() {
@@ -20,6 +27,10 @@ const { start, reset, remaining, } = useCountdown(0, {
         stopwatch.start();
     },
 })
+
+const showWallpaperSelector = () => {
+    wallpaperSelector.value = !wallpaperSelector.value;
+}
 
 const onButtonClicked = () => {
     if (focusing.value) {
@@ -34,14 +45,48 @@ const onButtonClicked = () => {
         stopwatch.start();
     }
 }
+
+const onSearchButtonClicked = async () => {
+    const images = await getImages(searchQuery.value);
+    console.log(images);
+}
 </script>
 
 <template>
-    <div class="w-64 h-full fixed bg-gray-200"></div>
+    <img :src="background" alt="" class="w-screen h-screen fixed z-[-1]">
+    <button class="fixed mx-4 text-white my-4 cursor-pointer" v-on:click="showWallpaperSelector">
+        <svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"
+            xmlns="http://www.w3.org/2000/svg" aria-label="controls" viewBox="0 0 32 32"
+            preserveAspectRatio="xMidYMid meet" fill="currentColor" width="32" height="32">
+            <path
+                d="M 3 15.7325C 3.5978 15.3867 4 14.7403 4 14C 4 13.2597 3.5978 12.6133 3 12.2675C 2.98457 12.2586 2.96901 12.2499 2.95332 12.2414C 2.66993 12.0875 2.34518 12 2 12C 1.63581 12 1.29436 12.0974 1.00024 12.2674L 1 12.2675C 0.402199 12.6133 0 13.2597 0 14C 0 14.7403 0.402199 15.3867 1 15.7325C 1.01543 15.7414 1.03099 15.7501 1.04668 15.7586C 1.33007 15.9125 1.65482 16 2 16C 2.36419 16 2.70564 15.9026 2.99976 15.7326L 3 15.7325ZM 3 1L 3 11.1707C 2.68722 11.0602 2.35064 11 2 11C 1.64936 11 1.31278 11.0602 1 11.1707L 1 1C 1 0.447723 1.44771 0 2 0C 2.55228 0 3 0.447723 3 1ZM 3 16.8293C 2.68722 16.9398 2.35064 17 2 17C 1.64936 17 1.31278 16.9398 1 16.8293L 1 19C 1 19.5523 1.44771 20 2 20C 2.55228 20 3 19.5523 3 19L 3 16.8293ZM 11 7.73245C 11.5978 7.38666 12 6.7403 12 6C 12 5.2597 11.5978 4.61334 11 4.26755C 10.9846 4.25864 10.969 4.24991 10.9533 4.24139C 10.6699 4.08746 10.3452 4 10 4C 9.63581 4 9.29436 4.09735 9.00024 4.26743L 9 4.26755C 8.4022 4.61334 8 5.2597 8 6C 8 6.7403 8.4022 7.38666 9 7.73245C 9.01543 7.74136 9.03099 7.75009 9.04668 7.75861C 9.33007 7.91254 9.65482 8 10 8C 10.3642 8 10.7056 7.90265 10.9998 7.73257L 11 7.73245ZM 11 1L 11 3.17072C 10.6872 3.06015 10.3506 3 10 3C 9.64936 3 9.31278 3.06015 9 3.17072L 9 1C 9 0.447723 9.44772 0 10 0C 10.5523 0 11 0.447723 11 1ZM 11 8.82928C 10.6872 8.93985 10.3506 9 10 9C 9.64936 9 9.31278 8.93985 9 8.82928L 9 19C 9 19.5523 9.44772 20 10 20C 10.5523 20 11 19.5523 11 19L 11 8.82928ZM 20 10C 20 10.7403 19.5978 11.3867 19 11.7325L 18.9998 11.7326C 18.7056 11.9026 18.3642 12 18 12C 17.6548 12 17.3301 11.9125 17.0467 11.7586C 17.031 11.7501 17.0154 11.7414 17 11.7325C 16.4022 11.3867 16 10.7403 16 10C 16 9.2597 16.4022 8.61334 17 8.26755L 17.0002 8.26743C 17.2944 8.09735 17.6358 8 18 8C 18.3452 8 18.6699 8.08746 18.9533 8.24139C 18.969 8.24991 18.9846 8.25861 19 8.26755C 19.5978 8.61334 20 9.2597 20 10ZM 19 7.17072L 19 1C 19 0.447723 18.5523 0 18 0C 17.4477 0 17 0.447723 17 1L 17 7.17072C 17.3128 7.06015 17.6494 7 18 7C 18.3506 7 18.6872 7.06015 19 7.17072ZM 18 13C 18.3506 13 18.6872 12.9398 19 12.8293L 19 19C 19 19.5523 18.5523 20 18 20C 17.4477 20 17 19.5523 17 19L 17 12.8293C 17.3128 12.9398 17.6494 13 18 13Z"
+                transform="matrix(0 1 -1 0 26 6)" />
+        </svg>
+    </button>
+    <div class="w-96 h-full fixed bg-white flex flex-col items-center justify-start gap-2 p-4" v-if="wallpaperSelector">
+        <div class="flex flex-row w-full items-center justify-between">
+            <div class="text-2xl">Select Wallpaper</div>
+            <button v-on:click="showWallpaperSelector" class="cursor-pointer">
+                <svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"
+                    xmlns="http://www.w3.org/2000/svg" aria-label="view-close-small" viewBox="0 0 32 32"
+                    preserveAspectRatio="xMidYMid meet" fill="currentColor" width="32" height="32">
+                    <path
+                        d="M 15.4142 3.41421C 16.1952 2.63317 16.1952 1.36681 15.4142 0.585777C 14.6332 -0.195259 13.3668 -0.195259 12.5858 0.585777L 8.00005 5.17156L 3.41423 0.585777C 2.63322 -0.195259 1.36687 -0.195259 0.585861 0.585777C -0.195206 1.36681 -0.195206 2.63317 0.585861 3.41421L 5.17162 7.99996L 0.5858 12.5858C -0.195267 13.3668 -0.195267 14.6332 0.5858 15.4142C 1.36681 16.1952 2.63316 16.1952 3.41417 15.4142L 8.00005 10.8284L 12.5859 15.4142C 13.3669 16.1952 14.6332 16.1952 15.4142 15.4142C 16.1953 14.6332 16.1953 13.3668 15.4142 12.5858L 10.8284 7.99996L 15.4142 3.41421Z"
+                        transform="translate(8 8)" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-row gap-1 w-full">
+            <input type="text" v-model="searchQuery" class="bg-gray-300 p-2 rounded-lg w-full" placeholder="Search...">
+            <button class="bg-green-600 hover:bg-green-500 cursor-pointer text-white rounded-lg px-2"
+                v-on:click="onSearchButtonClicked()">Search</button>
+        </div>
+    </div>
     <div class="w-screen h-screen flex flex-col">
-        <div class="w-full text-center py-4 text-2xl">{{ headerText }}</div>
+        <div class="w-full text-center py-4 text-2xl text-white">{{ headerText }}</div>
         <div class="w-full h-full flex items-center justify-center">
-            <button class="w-64 h-64 rounded-full border cursor-pointer" v-on:click="onButtonClicked()">
+            <button class="w-64 h-64 rounded-full hover:bg-white text-white hover:text-black border cursor-pointer"
+                v-on:click="onButtonClicked()">
                 <div v-if="focusing">
                     {{ formatSecondsFromStopwatch(stopwatch) }}
                 </div>
