@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { useStopwatch } from 'vue-timer-hook';
 import { formatSecondsFromStopwatch, formatSecondsFromTotalSeconds } from '../helpers/formatSeconds';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { useCountdown } from '@vueuse/core';
 import { getBreakTime } from '../helpers/getBreakTime';
 import { getTotalMinutes } from '../helpers/getTotalMinutes';
-import background from '../assets/background.jpg'
+import defaultBackground from '../assets/background.jpg'
 import { getImages } from '../helpers/getImages';
+import { BackgroundImage } from '../types/backgroundImage';
 
 const stopwatch = useStopwatch(0, false);
 const wallpaperSelector = ref(false);
+
+const background = ref(defaultBackground);
 
 const focusing = ref(false);
 const headerText = ref("Start Focusing!!!!");
 
 const searchQuery = ref("");
-const images = ref([]);
+const images: Ref<BackgroundImage[]> = ref([]);
 const loading = ref(false);
 
 const { start, reset, remaining, } = useCountdown(0, {
@@ -47,13 +50,18 @@ const onButtonClicked = () => {
 }
 
 const onSearchButtonClicked = async () => {
-    const images = await getImages(searchQuery.value);
-    console.log(images);
+    loading.value = true;
+    images.value = await getImages(searchQuery.value);
+    loading.value = false;
+}
+
+const onBackgroundPreviewClicked = (image: string) => {
+    background.value = image;
 }
 </script>
 
 <template>
-    <img :src="background" alt="" class="w-screen h-screen fixed z-[-1]">
+    <img :src="background" alt="" class="w-screen fixed z-[-1] object-fill">
     <button class="fixed mx-4 text-white my-4 cursor-pointer" v-on:click="showWallpaperSelector">
         <svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"
             xmlns="http://www.w3.org/2000/svg" aria-label="controls" viewBox="0 0 32 32"
@@ -77,9 +85,15 @@ const onSearchButtonClicked = async () => {
             </button>
         </div>
         <div class="flex flex-row gap-1 w-full">
-            <input type="text" v-model="searchQuery" class="bg-gray-300 p-2 rounded-lg w-full" placeholder="Search...">
+            <input type="text" v-model="searchQuery" v-on:submit="onSearchButtonClicked()"
+                class="bg-gray-300 p-2 rounded-lg w-full" placeholder="Search...">
             <button class="bg-green-600 hover:bg-green-500 cursor-pointer text-white rounded-lg px-2"
                 v-on:click="onSearchButtonClicked()">Search</button>
+        </div>
+        <div class="flex flex-col h-full w-full gap-2 overflow-y-scroll">
+            <img v-for="image in images" :src="image.webformatUrl" alt=""
+                class="w-full hover:border-4 hover:border-green-700 cursor-pointer"
+                v-on:click="onBackgroundPreviewClicked(image.largeImageUrl)">
         </div>
     </div>
     <div class="w-screen h-screen flex flex-col">
