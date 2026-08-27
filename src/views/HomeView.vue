@@ -21,6 +21,8 @@ const searchQuery = ref("");
 const images: Ref<BackgroundImage[]> = ref([]);
 const loading = ref(false);
 
+const primaryColor = ref("#FFFFFF");
+
 const { start, reset, remaining, } = useCountdown(0, {
     onComplete() {
         reset();
@@ -62,7 +64,7 @@ const onBackgroundPreviewClicked = (image: string) => {
 
 <template>
     <img :src="background" alt="" class="w-screen fixed z-[-1] object-fill">
-    <button class="fixed mx-4 text-white my-4 cursor-pointer" v-on:click="showWallpaperSelector">
+    <button v-on:click="showWallpaperSelector" class="fixed mx-4 my-4 cursor-pointer" :style="{ color: primaryColor }">
         <svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"
             xmlns="http://www.w3.org/2000/svg" aria-label="controls" viewBox="0 0 32 32"
             preserveAspectRatio="xMidYMid meet" fill="currentColor" width="32" height="32">
@@ -71,7 +73,7 @@ const onBackgroundPreviewClicked = (image: string) => {
                 transform="matrix(0 1 -1 0 26 6)" />
         </svg>
     </button>
-    <div class="w-96 h-full fixed bg-white flex flex-col items-center justify-start gap-2 p-4" v-if="wallpaperSelector">
+    <div class="w-96 h-full fixed bg-white flex flex-col justify-start gap-2 p-4" v-if="wallpaperSelector">
         <div class="flex flex-row w-full items-center justify-between">
             <div class="text-2xl">Select Wallpaper</div>
             <button v-on:click="showWallpaperSelector" class="cursor-pointer">
@@ -87,20 +89,25 @@ const onBackgroundPreviewClicked = (image: string) => {
         <div class="flex flex-row gap-1 w-full">
             <input type="text" v-model="searchQuery" v-on:submit="onSearchButtonClicked()"
                 class="bg-gray-300 p-2 rounded-lg w-full" placeholder="Search...">
-            <button class="bg-green-600 hover:bg-green-500 cursor-pointer text-white rounded-lg px-2"
+            <button class="bg-green-600 hover:bg-green-500 cursor-pointer rounded-lg px-2 text-[#ffffff]"
                 v-on:click="onSearchButtonClicked()">Search</button>
         </div>
-        <div class="flex flex-col h-full w-full gap-2 overflow-y-scroll">
+        <div class="flex flex-col h-[50%] w-full gap-2 overflow-y-scroll">
             <img v-for="image in images" :src="image.webformatUrl" alt=""
                 class="w-full hover:border-4 hover:border-green-700 cursor-pointer"
                 v-on:click="onBackgroundPreviewClicked(image.largeImageUrl)">
         </div>
+        <div class="text-2xl">Select Colour</div>
+        <div class="flex flex-row flex-wrap">
+            <input type="color" v-model="primaryColor" name="" id="">
+            {{ primaryColor }}
+        </div>
     </div>
     <div class="w-screen h-screen flex flex-col">
-        <div class="w-full text-center py-4 text-2xl text-white">{{ headerText }}</div>
+        <div class="w-full text-center py-4 text-2xl" :style="{ color: primaryColor }">{{ headerText }}</div>
         <div class="w-full h-full flex items-center justify-center">
-            <button class="w-64 h-64 rounded-full hover:bg-white text-white hover:text-black border cursor-pointer"
-                v-on:click="onButtonClicked()">
+            <button class="w-64 h-64 rounded-full hover:bg-white hover:text-black border cursor-pointer"
+                :style="{ color: primaryColor }" v-on:click="onButtonClicked()">
                 <div v-if="focusing">
                     {{ formatSecondsFromStopwatch(stopwatch) }}
                 </div>
