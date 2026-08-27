@@ -7,6 +7,10 @@ Flowency is a productivity desktop app which workes on the flowtime technique in
 - 50 to 90 minutes of work - 10 Minute Break
 - More than 90 minutes of work - 15 Minute Break
 
+## How to use
+
+Click the big circle in the center to start focusing! Click it again to take a break, based on how much you worked.
+
 ## Technologies Used
 
 - Tauri

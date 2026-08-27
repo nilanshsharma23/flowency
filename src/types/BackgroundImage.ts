@@ -1,4 +1,4 @@
 export type BackgroundImage = {
-  webformatUrl: string;
   largeImageUrl: string;
+  webformatUrl: string;
 };

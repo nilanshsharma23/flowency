@@ -7,7 +7,7 @@ import { getBreakTime } from '../helpers/getBreakTime';
 import { getTotalMinutes } from '../helpers/getTotalMinutes';
 import defaultBackground from '../assets/background.jpg'
 import { getImages } from '../helpers/getImages';
-import { BackgroundImage } from '../types/backgroundImage';
+import { BackgroundImage } from '../types/BackgroundImage';
 
 const stopwatch = useStopwatch(0, false);
 const wallpaperSelector = ref(false);

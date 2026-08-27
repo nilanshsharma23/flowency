@@ -1,4 +1,4 @@
-import { BackgroundImage } from "../types/backgroundImage";
+import { BackgroundImage } from "../types/BackgroundImage";
 
 export const getImages = async (searchQuery: string) => {
   const searchQueryConcatted = searchQuery.split(" ").join("+");
