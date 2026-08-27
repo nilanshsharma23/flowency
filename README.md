@@ -1,7 +1,8 @@
-# Tauri + Vue + TypeScript
+# Flowency
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Flowency is a productivity desktop app which workes on the flowtime technique in which the duration of your break depends on the duration of work that you did.
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- Under 25 minutes of work - 5 Minute Break
+- 25 to 50 minutes of work - 8 Minute Break
+- 50 to 90 minutes of work - 10 Minute Break
+- More than 90 minutes of work - 15 Minute Break
