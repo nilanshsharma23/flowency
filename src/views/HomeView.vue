@@ -106,7 +106,7 @@ const onBackgroundPreviewClicked = (image: string) => {
     <div class="w-screen h-screen flex flex-col">
         <div class="w-full text-center py-4 text-2xl" :style="{ color: primaryColor }">{{ headerText }}</div>
         <div class="w-full h-full flex items-center justify-center">
-            <button class="w-64 h-64 rounded-full hover:bg-white hover:text-black border cursor-pointer"
+            <button class="w-64 h-64 rounded-full hover:bg-white text-4xl hover:text-black border-4 cursor-pointer"
                 :style="{ color: primaryColor }" v-on:click="onButtonClicked()">
                 <div v-if="focusing">
                     {{ formatSecondsFromStopwatch(stopwatch) }}
